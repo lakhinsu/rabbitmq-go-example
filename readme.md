@@ -1,5 +1,5 @@
 # Example for using RabbitMQ with Golang
-This repository contains the example code for publishing and reading a message to and from an RabbitMQ message queue. I have also written a blog for the same, feel free to check it out. 
+This repository contains the example code for publishing and reading a message to and from an RabbitMQ message queue. I have also written a [blog](https://medium.com/@hinsulak/using-rabbitmq-with-golang-and-docker-e674831c959c) for the same, feel free to check it out. 
 This repository also contains Dockerfile and docker-compose.yaml files for deploying these services using Docker.
 
 ## Run locally
