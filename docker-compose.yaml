@@ -1,0 +1,46 @@
+version: '3.6'
+
+networks:
+  rabbitmq-example:
+    driver: bridge
+
+services:
+  rabbitmq:
+    image: 'rabbitmq:3-management'
+    networks:
+      - rabbitmq-example
+    volumes:
+      - ./rabbit-mq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
+    ports:
+      - "8080:15672"
+      - "5000:5673"
+    healthcheck:
+      test: [ "CMD", "rabbitmqctl", "status"]
+      interval: 5s
+      timeout: 15s
+      retries: 5
+  producer:
+    build: ./producer
+    ports:
+      - "5050:5050"
+    networks:
+      - rabbitmq-example
+    depends_on:
+      - rabbitmq
+    environment:
+      GIN_MODE: "release"
+      GIN_HTTPS: "false"
+      GIN_ADDR: "0.0.0.0"
+      GIN_PORT: "5050"
+      LOG_LEVEL: "debug"
+      RMQ_URL: "amqp://guest:guest@rabbitmq:5673/"
+  consumer:
+    build: ./consumer
+    networks:
+      - rabbitmq-example
+    depends_on:
+      - rabbitmq
+    restart: on-failure
+    environment:
+      LOG_LEVEL: "debug"
+      RMQ_URL: "amqp://guest:guest@rabbitmq:5673/"
