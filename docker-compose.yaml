@@ -13,7 +13,7 @@ services:
       - ./rabbit-mq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
     ports:
       - "8080:15672"
-      - "5000:5673"
+      # - "5000:5673" # Expose this port while running the producer and consumer services locally
     healthcheck:
       test: [ "CMD", "rabbitmqctl", "status"]
       interval: 5s
@@ -22,12 +22,12 @@ services:
   producer:
     build: ./producer
     ports:
-      - "5050:5050"
+      - "5050:5050" # Port to access our REST API
     networks:
       - rabbitmq-example
     depends_on:
       - rabbitmq
-    environment:
+    environment: # Sample env variables for producer
       GIN_MODE: "release"
       GIN_HTTPS: "false"
       GIN_ADDR: "0.0.0.0"
@@ -41,6 +41,6 @@ services:
     depends_on:
       - rabbitmq
     restart: on-failure
-    environment:
+    environment: # Sample env variables for consumer
       LOG_LEVEL: "debug"
       RMQ_URL: "amqp://guest:guest@rabbitmq:5673/"

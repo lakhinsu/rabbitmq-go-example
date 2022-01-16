@@ -31,7 +31,7 @@ func init() {
 		log.Logger = log.With().Str("host", host).Logger()
 	}
 
-	log.Logger = log.With().Str("service", "gin-boilerplate").Logger()
+	log.Logger = log.With().Str("service", "rabbitmq-producer").Logger()
 
 	log.Logger = log.With().Caller().Logger()
 }
